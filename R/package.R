@@ -1,8 +1,20 @@
 
-#' Nice and Easy Terminal Input
-#'
-#' TODO
-#'
-#' @docType package
-#' @name linenoise
-NULL
+#' @export
+
+read_line <- function(prompt = "") {
+
+}
+
+
+#' @export
+
+save_input_history <- function(file = "") {
+
+}
+
+
+#' @export
+
+load_input_history <- function(file = "") {
+
+}
