@@ -1,0 +1,12 @@
+Package: linenoise
+Title: Nice and Easy Terminal Input
+Version: 1.0.0
+Author: Salvatore Sanfilippo, Pieter Noordhuis, Gabor Csardi
+Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
+Description: TODO
+License: BSD_2_clause + file LICENSE
+LazyData: true
+URL: https://github.com/gaborcsardi/linenoise
+BugReports: https://github.com/gaborcsardi/linenoise/issues
+Suggests: 
+    testthat
