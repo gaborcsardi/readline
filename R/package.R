@@ -20,7 +20,11 @@ strip_ansi <- function(string) gsub(ansi_regex, "", string, perl = TRUE)
 
 read_line <- function(prompt = "") {
   prompt <- as_string(prompt)
-  .Call("R_linenoise_read_line", prompt, strip_ansi(prompt))
+  if (is_supported_terminal()) {
+    .Call("R_linenoise_read_line", prompt, strip_ansi(prompt))
+  } else {
+    readline(prompt)
+  }
 }
 
 
@@ -31,4 +35,12 @@ save_input_history <- function(file = "") {
 
 load_input_history <- function(file = "") {
   ## TODO
+}
+
+is_supported_terminal <- function() {
+  isatty(stdin()) &&
+    Sys.getenv("RSTUDIO") != 1 &&
+    Sys.getenv("R_GUI_APP_VERSION") == "" &&
+    .Platform$GUI != "Rgui" &&
+    !identical(getOption("STERM"), "iESS") && Sys.getenv("EMACS") != "t"
 }

@@ -118,9 +118,10 @@
 #include <unistd.h>
 #include "linenoise.h"
 
+#include <R.h>
+
 #define LINENOISE_DEFAULT_HISTORY_MAX_LEN 100
 #define LINENOISE_MAX_LINE 4096
-static char *unsupported_term[] = {"dumb","cons25","emacs",NULL};
 static linenoiseCompletionCallback *completionCallback = NULL;
 
 static struct termios orig_termios; /* In order to restore at exit.*/
@@ -201,18 +202,6 @@ FILE *lndebug_fp = NULL;
 /* Set if to use or not the multi line mode. */
 void linenoiseSetMultiLine(int ml) {
     mlmode = ml;
-}
-
-/* Return true if the terminal name is in the list of terminals we know are
- * not able to understand basic escape sequences. */
-static int isUnsupportedTerm(void) {
-    char *term = getenv("TERM");
-    int j;
-
-    if (term == NULL) return 0;
-    for (j = 0; unsupported_term[j]; j++)
-        if (!strcasecmp(term,unsupported_term[j])) return 1;
-    return 0;
 }
 
 /* Raw mode: 1960 magic shit. */
@@ -327,8 +316,7 @@ void linenoiseClearScreen(void) {
 /* Beep, used for completion when there is nothing to complete or when all
  * the choices were already shown. */
 static void linenoiseBeep(void) {
-    fprintf(stderr, "\x7");
-    fflush(stderr);
+  REprintf("\x7");
 }
 
 /* ============================== Completion ================================ */
@@ -913,7 +901,7 @@ static int linenoiseEdit(int stdin_fd, int stdout_fd, char *buf,
 void linenoisePrintKeyCodes(void) {
     char quit[4];
 
-    printf("Linenoise key codes debugging mode.\n"
+    Rprintf("Linenoise key codes debugging mode.\n"
             "Press keys to see scan codes. Type 'quit' at any time to exit.\n");
     if (enableRawMode(STDIN_FILENO) == -1) return;
     memset(quit,' ',4);
@@ -927,10 +915,9 @@ void linenoisePrintKeyCodes(void) {
         quit[sizeof(quit)-1] = c; /* Insert current char on the right. */
         if (memcmp(quit,"quit",sizeof(quit)) == 0) break;
 
-        printf("'%c' %02x (%d) (type quit to exit)\n",
-            isprint(c) ? c : '?', (int)c, (int)c);
-        printf("\r"); /* Go left edge manually, we are in raw mode. */
-        fflush(stdout);
+        Rprintf("'%c' %02x (%d) (type quit to exit)\n",
+		isprint(c) ? c : '?', (int)c, (int)c);
+        Rprintf("\r"); /* Go left edge manually, we are in raw mode. */
     }
     disableRawMode(STDIN_FILENO);
 }
@@ -959,7 +946,7 @@ static int linenoiseRaw(char *buf, size_t buflen, const char *prompt,
         count = linenoiseEdit(STDIN_FILENO, STDOUT_FILENO, buf, buflen,
 			      prompt, pprompt);
         disableRawMode(STDIN_FILENO);
-        printf("\n");
+        Rprintf("\n");
     }
     return count;
 }
@@ -973,23 +960,9 @@ char *linenoise(const char *prompt, const char *pprompt) {
     char buf[LINENOISE_MAX_LINE];
     int count;
 
-    if (isUnsupportedTerm()) {
-        size_t len;
-
-        printf("%s",prompt);
-        fflush(stdout);
-        if (fgets(buf,LINENOISE_MAX_LINE,stdin) == NULL) return NULL;
-        len = strlen(buf);
-        while(len && (buf[len-1] == '\n' || buf[len-1] == '\r')) {
-            len--;
-            buf[len] = '\0';
-        }
-        return strdup(buf);
-    } else {
-        count = linenoiseRaw(buf,LINENOISE_MAX_LINE,prompt,pprompt);
-        if (count == -1) return NULL;
-        return strdup(buf);
-    }
+    count = linenoiseRaw(buf,LINENOISE_MAX_LINE,prompt,pprompt);
+    if (count == -1) return NULL;
+    return strdup(buf);
 }
 
 /* ================================ History ================================= */
