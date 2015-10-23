@@ -16,12 +16,12 @@ strip_ansi <- function(string) gsub(ansi_regex, "", string, perl = TRUE)
 #' @return A character scalar, the string that was read.
 #'
 #' @export
-#' @useDynLib linenoise R_linenoise_read_line
+#' @useDynLib readline R_readline_read_line
 
 read_line <- function(prompt = "") {
   prompt <- as_string(prompt)
   if (is_supported_terminal()) {
-    .Call("R_linenoise_read_line", prompt, strip_ansi(prompt))
+    .Call("R_readline_read_line", prompt, strip_ansi(prompt))
   } else {
     readline(prompt)
   }

@@ -1,4 +1,4 @@
 library(testthat)
-library(linenoise)
+library(readline)
 
-test_check("linenoise")
+test_check("readline")

@@ -1,4 +1,4 @@
-Package: linenoise
+Package: readline
 Title: Nice and Easy Terminal Input
 Version: 1.0.0
 Author: Salvatore Sanfilippo, Pieter Noordhuis, Gabor Csardi
@@ -9,8 +9,8 @@ Description: Read a line or a paragraph from the terminal.
     library by Salvatore Sanfilippo.
 License: BSD_2_clause + file LICENSE
 LazyData: true
-URL: https://github.com/gaborcsardi/linenoise
-BugReports: https://github.com/gaborcsardi/linenoise/issues
+URL: https://github.com/gaborcsardi/readline
+BugReports: https://github.com/gaborcsardi/readline/issues
 Suggests:
     testthat,
     maxygen

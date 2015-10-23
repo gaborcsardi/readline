@@ -1,7 +1,7 @@
 
-context("linenoise")
+context("readline")
 
-test_that("linenoise works", {
+test_that("readline works", {
 
   expect_true(TRUE)
 
