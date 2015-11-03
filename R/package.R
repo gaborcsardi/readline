@@ -1,12 +1,4 @@
 
-
-ansi_regex <- paste0("(?:(?:\\x{001b}\\[)|\\x{009b})",
-                     "(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])",
-                     "|\\x{001b}[A-M]")
-
-
-strip_ansi <- function(string) gsub(ansi_regex, "", string, perl = TRUE)
-
 #' Read a line from the terminal
 #'
 #' @param prompt A string that is printed at the beginning of the
@@ -21,7 +13,7 @@ strip_ansi <- function(string) gsub(ansi_regex, "", string, perl = TRUE)
 read_line <- function(prompt = "") {
   prompt <- as_string(prompt)
   if (is_supported_terminal()) {
-    .Call("R_readline_read_line", prompt, strip_ansi(prompt))
+    .Call("R_readline_read_line", prompt)
   } else {
     readline(prompt)
   }
@@ -36,6 +28,7 @@ save_input_history <- function(file = "") {
 load_input_history <- function(file = "") {
   ## TODO
 }
+
 
 is_supported_terminal <- function() {
   isatty(stdin()) &&
