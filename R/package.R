@@ -5,15 +5,22 @@
 #'   line of the user input. Ideally it should be short, so there
 #'   is enough space for the input. It can be colored and styled
 #'   with ANSI escape sequences from the \code{crayon} package.
+#' @param multiline Whether to use multi-line mode. This is ignored
+#'   on unsupported terminals, those work similarly to multi-line
+#'   mode, anyway.
 #' @return A character scalar, the string that was read.
 #'
 #' @export
 #' @useDynLib readline R_readline_read_line
 
-read_line <- function(prompt = "") {
+read_line <- function(prompt = "", multiline = FALSE) {
+
   prompt <- as_string(prompt)
+  multiline <- as_flag(multiline)
+
   if (is_supported_terminal()) {
-    .Call("R_readline_read_line", prompt)
+    .Call("R_readline_read_line", prompt, multiline)
+
   } else {
     readline(prompt)
   }

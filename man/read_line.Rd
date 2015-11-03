@@ -4,17 +4,20 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "")
+read_line(prompt = "", multiline = FALSE)
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
 line of the user input. Ideally it should be short, so there
 is enough space for the input. It can be colored and styled
 with ANSI escape sequences from the \code{crayon} package.}
+
+\item{multiline}{Whether to use multi-line mode. This is ignored
+on unsupported terminals, those work similarly to multi-line
+mode, anyway.}
 }
 \value{
 A character scalar, the string that was read.
-
 }
 \description{
 Read a line from the terminal
