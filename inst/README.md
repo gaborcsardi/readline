@@ -31,4 +31,4 @@ library(readline)
 
 ## License
 
-BSD © Salvatore Sanfilippo, Pieter Noordhuis, Gábor Csárdi
+BSD © Salvatore Sanfilippo, Pieter Noordhuis, Yuji Hirose, Gábor Csárdi

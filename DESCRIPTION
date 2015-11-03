@@ -1,7 +1,7 @@
 Package: readline
 Title: Nice and Easy Terminal Input
 Version: 1.0.0
-Author: Salvatore Sanfilippo, Pieter Noordhuis, Gabor Csardi
+Author: Salvatore Sanfilippo, Pieter Noordhuis, Yuji Hirose, Gabor Csardi
 Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
 Description: Read a line or a paragraph from the terminal.
     It supports ANSI colors and UniCode characters. It also supports
