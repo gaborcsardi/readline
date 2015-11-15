@@ -118,6 +118,12 @@
 #include <unistd.h>
 #include "linenoise.h"
 
+#include <R.h>
+
+#define printf(template, ...) Rprintf(template, ##__VA_ARGS__)
+#define fprintf(stream, template, ...) REprintf(template, ##__VA_ARGS__)
+#define fflush(stream)
+
 #define LINENOISE_DEFAULT_HISTORY_MAX_LEN 100
 #define LINENOISE_MAX_LINE 4096
 #define UNUSED(x) (void)(x)
