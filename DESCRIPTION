@@ -12,6 +12,5 @@ LazyData: true
 URL: https://github.com/gaborcsardi/readline
 BugReports: https://github.com/gaborcsardi/readline/issues
 Suggests:
-    testthat,
-    maxygen
+    testthat
 RoxygenNote: 5.0.0
