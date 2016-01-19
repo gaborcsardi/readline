@@ -39,6 +39,7 @@ load_input_history <- function(file = "") {
 
 is_supported_terminal <- function() {
   isatty(stdin()) &&
+    .Platform$OS.type == "unix" &&
     Sys.getenv("RSTUDIO") != 1 &&
     Sys.getenv("R_GUI_APP_VERSION") == "" &&
     .Platform$GUI != "Rgui" &&
