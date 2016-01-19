@@ -8,34 +8,60 @@
 #' @param multiline Whether to use multi-line mode. This is ignored
 #'   on unsupported terminals, those work similarly to multi-line
 #'   mode, anyway.
+#' @param history If not \code{NULL}, then it must be a character
+#'   scalar, the name of the file that is used as a browseable history. The
+#'   newly entered entry is added to this file. Note that history
+#'   might not be supported by the \code{base::readline} fallback
+#'   method.
 #' @return A character scalar, the string that was read.
 #'
 #' @export
 #' @useDynLib readline R_readline_read_line
+#' @examples
+#' \dontrun{
+#'   read_line(prompt = "???> ")
+#'
+#'   ## History files
+#'   hist <- tempfile()
+#'   cat("previous entry\n", file = hist, append = TRUE)
+#'   cat("another entry\n", file = hist, append = TRUE)
+#'   read_line(prompt = "???> ", history = hist)
+#'
+#'   ## The new entry is added to the history file
+#'   readLines(hist)
+#' }
 
-read_line <- function(prompt = "", multiline = FALSE) {
+read_line <- function(prompt = "", multiline = FALSE, history = NULL) {
 
   prompt <- as_string(prompt)
   multiline <- as_flag(multiline)
+  if (!is.null(history)) history <- as_string(history)
 
   if (is_supported_terminal()) {
-    .Call("R_readline_read_line", prompt, multiline)
+    ## This loads the history if needed
+    ans <- .Call("R_readline_read_line", prompt, multiline, history)
 
   } else {
-    readline(prompt)
+
+    if (!is.null(history)) {
+      tmp <- tempfile()
+      tryCatch(savehistory(tmp), error = function(e) e)
+      on.exit(
+        tryCatch(loadhistory(tmp), error = function(e) e),
+        add = TRUE
+      )
+    }
+
+    ans <- readline(prompt)
+
   }
+
+  ## Save history if requested
+  if (!is.null(history)) {
+    cat(ans, sep = "", "\n", file = history, append = TRUE)
+  }
+  ans
 }
-
-
-save_input_history <- function(file = "") {
-  ## TODO
-}
-
-
-load_input_history <- function(file = "") {
-  ## TODO
-}
-
 
 is_supported_terminal <- function() {
   isatty(stdin()) &&

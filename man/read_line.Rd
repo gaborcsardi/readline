@@ -4,7 +4,7 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "", multiline = FALSE)
+read_line(prompt = "", multiline = FALSE, history = NULL)
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
@@ -15,11 +15,31 @@ with ANSI escape sequences from the \code{crayon} package.}
 \item{multiline}{Whether to use multi-line mode. This is ignored
 on unsupported terminals, those work similarly to multi-line
 mode, anyway.}
+
+\item{history}{If not \code{NULL}, then it must be a character
+scalar, the name of the file that is used as a browseable history. The
+newly entered entry is added to this file. Note that history
+might not be supported by the \code{base::readline} fallback
+method.}
 }
 \value{
 A character scalar, the string that was read.
 }
 \description{
 Read a line from the terminal
+}
+\examples{
+\dontrun{
+  read_line(prompt = "???> ")
+
+  ## History files
+  hist <- tempfile()
+  cat("previous entry\\n", file = hist, append = TRUE)
+  cat("another entry\\n", file = hist, append = TRUE)
+  read_line(prompt = "???> ", history = hist)
+
+  ## The new entry is added to the history file
+  readLines(hist)
+}
 }
 

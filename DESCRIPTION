@@ -13,4 +13,4 @@ URL: https://github.com/gaborcsardi/readline
 BugReports: https://github.com/gaborcsardi/readline/issues
 Suggests:
     testthat
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
