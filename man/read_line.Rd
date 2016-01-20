@@ -4,7 +4,8 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "", multiline = FALSE, history = NULL)
+read_line(prompt = "", multiline = FALSE, history = NULL,
+  completions = NULL)
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
@@ -21,6 +22,10 @@ scalar, the name of the file that is used as a browseable history. The
 newly entered entry is added to this file. Note that history
 might not be supported by the \code{base::readline} fallback
 method.}
+
+\item{completions}{A character vector of possible TAB-completions.
+Ignored on unsupported terminals that use the \code{base::readline}
+fallback mechanism.}
 }
 \value{
 A character scalar, the string that was read.
@@ -30,16 +35,19 @@ Read a line from the terminal
 }
 \examples{
 \dontrun{
-  read_line(prompt = "???> ")
+  read_line(prompt = "what> ")
 
   ## History files
   hist <- tempfile()
   cat("previous entry\\n", file = hist, append = TRUE)
   cat("another entry\\n", file = hist, append = TRUE)
-  read_line(prompt = "???> ", history = hist)
+  read_line(prompt = "what> ", history = hist)
 
   ## The new entry is added to the history file
   readLines(hist)
+
+  ## TAB-completion
+  read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 }
 }
 

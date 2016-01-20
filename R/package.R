@@ -13,25 +13,32 @@
 #'   newly entered entry is added to this file. Note that history
 #'   might not be supported by the \code{base::readline} fallback
 #'   method.
+#' @param completions A character vector of possible TAB-completions.
+#'   Ignored on unsupported terminals that use the \code{base::readline}
+#'   fallback mechanism.
 #' @return A character scalar, the string that was read.
 #'
 #' @export
 #' @useDynLib readline R_readline_read_line
 #' @examples
 #' \dontrun{
-#'   read_line(prompt = "???> ")
+#'   read_line(prompt = "what> ")
 #'
 #'   ## History files
 #'   hist <- tempfile()
 #'   cat("previous entry\n", file = hist, append = TRUE)
 #'   cat("another entry\n", file = hist, append = TRUE)
-#'   read_line(prompt = "???> ", history = hist)
+#'   read_line(prompt = "what> ", history = hist)
 #'
 #'   ## The new entry is added to the history file
 #'   readLines(hist)
+#'
+#'   ## TAB-completion
+#'   read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 #' }
 
-read_line <- function(prompt = "", multiline = FALSE, history = NULL) {
+read_line <- function(prompt = "", multiline = FALSE, history = NULL,
+                      completions = NULL) {
 
   prompt <- as_string(prompt)
   multiline <- as_flag(multiline)
@@ -39,7 +46,10 @@ read_line <- function(prompt = "", multiline = FALSE, history = NULL) {
 
   if (is_supported_terminal()) {
     ## This loads the history if needed
-    ans <- .Call("R_readline_read_line", prompt, multiline, history)
+    ans <- .Call(
+      "R_readline_read_line", prompt, multiline, history,
+      completions
+    )
 
   } else {
 
