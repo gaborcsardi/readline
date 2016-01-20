@@ -35,7 +35,7 @@ SEXP R_readline_read_line(SEXP prompt, SEXP multiline, SEXP history,
   linenoiseSetMultiLine(LOGICAL(multiline)[0]);
   line = linenoise(CHAR(STRING_ELT(prompt, 0)));
 
-  result = mkString(line);
+  result = ScalarString(mkCharCE(line, CE_UTF8));
   free(line);
 
   return result;
