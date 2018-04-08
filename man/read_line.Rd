@@ -48,6 +48,7 @@ Read a line from the terminal
   readLines(hist)
 
   ## TAB-completion
-  read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
+  read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"),
+            tab_complete = TRUE, show_hints = FALSE)
 }
 }
