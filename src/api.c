@@ -2,9 +2,22 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
+#include <string.h>
+
 #include "replxx/replxx.h"
 
-SEXP read_line(SEXP prompt, SEXP history) {
+void completion_hook(char const* prefix, int bp,
+		     replxx_completions* lc, void* ud) {
+  SEXP str = (SEXP) ud;
+  size_t i, n = LENGTH(str);
+  size_t len = strlen(prefix);
+  for (i = 0; i < n; i++) {
+    const char *s = CHAR(STRING_ELT(str, i));
+    if (! strncmp(prefix, s, len)) replxx_add_completion(lc, s);
+  }
+}
+
+SEXP read_line(SEXP prompt, SEXP history, SEXP completions) {
 
   SEXP result = R_NilValue;
   Replxx* replxx = replxx_init();
@@ -17,6 +30,8 @@ SEXP read_line(SEXP prompt, SEXP history) {
       error("Cannot open history file");
     }
   }
+
+  replxx_set_completion_callback(replxx, completion_hook, completions);
 
   const char* c_result = replxx_input(replxx, CHAR(STRING_ELT(prompt, 0)));
 
@@ -33,7 +48,7 @@ SEXP read_line(SEXP prompt, SEXP history) {
 
 
 static const R_CallMethodDef callMethods[]  = {
-  {"read_line", (DL_FUNC) &read_line, 2},
+  {"read_line", (DL_FUNC) &read_line, 3},
   {NULL, NULL, 0}
 };
 

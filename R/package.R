@@ -5,9 +5,6 @@
 #'   line of the user input. Ideally it should be short, so there
 #'   is enough space for the input. It can be colored and styled
 #'   with ANSI escape sequences from the \code{crayon} package.
-#' @param multiline Whether to use multi-line mode. This is ignored
-#'   on unsupported terminals, those work similarly to multi-line
-#'   mode, anyway.
 #' @param history If not \code{NULL}, then it must be a character
 #'   scalar, the name of the file that is used as a browseable history. The
 #'   newly entered entry is added to this file. Note that history
@@ -37,12 +34,14 @@
 #'   read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 #' }
 
-read_line <-  function(prompt = "? ", history = NULL) {
+read_line <- function(prompt = "? ", history = NULL,
+                      completions = character()) {
 
   if (!is.null(history)) history <- as_string(history)
+  completions <- as.character(completions)
 
   res <- tryCatch(
-    .Call(C_read_line, prompt, history),
+    .Call(C_read_line, prompt, history, completions),
     interrupt = function(e) stop("Interrupted")
   )
   if (is.null(res)) stop("Interrupted")
