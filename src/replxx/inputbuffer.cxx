@@ -637,7 +637,7 @@ int InputBuffer::getInputLine(PromptBase& pi) {
 	int terminatingKeystroke = -1;
 
 	// if there is already text in the buffer, display it first
-	if (_len > 0) {
+	if (_len > 0 || _replxx.has_hinter()) {
 		refreshLine(pi);
 	}
 
