@@ -4,7 +4,8 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "? ", history = NULL, completions = character())
+read_line(prompt = "? ", default = "", history = NULL,
+  completions = character(), show_hints = TRUE, tab_complete = FALSE)
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
@@ -12,15 +13,20 @@ line of the user input. Ideally it should be short, so there
 is enough space for the input. It can be colored and styled
 with ANSI escape sequences from the \code{crayon} package.}
 
+\item{default}{Default value.}
+
 \item{history}{If not \code{NULL}, then it must be a character
 scalar, the name of the file that is used as a browseable history. The
 newly entered entry is added to this file. Note that history
 might not be supported by the \code{base::readline} fallback
 method.}
 
-\item{completions}{A character vector of possible TAB-completions.
-Ignored on unsupported terminals that use the \code{base::readline}
-fallback mechanism.}
+\item{completions}{A character vector of possible TAB-completions or
+hints.}
+
+\item{show_hints}{Whether to show hints.}
+
+\item{tab_complete}{Whether to activate TAB completion.}
 }
 \value{
 A character scalar, the string that was read.
