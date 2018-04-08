@@ -1,0 +1,179 @@
+diff --git a/src/replxx/inputbuffer.cxx b/src/replxx/inputbuffer.cxx
+index 334f0f2..7d6553c 100644
+--- a/src/replxx/inputbuffer.cxx
++++ b/src/replxx/inputbuffer.cxx
+@@ -1,3 +1,6 @@
++
++#include <R.h>
++
+ #include <algorithm>
+ #include <memory>
+ #include <cerrno>
+@@ -465,9 +468,8 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 		_pos = _len;
+ 		refreshLine(pi);
+ 		_pos = savePos;
+-		printf("\nDisplay all %u possibilities? (y or n)",
++		REprintf("\nDisplay all %u possibilities? (y or n)",
+ 					 static_cast<unsigned int>(completions.size()));
+-		fflush(stdout);
+ 		onNewLine = true;
+ 		while (c != 'y' && c != 'Y' && c != 'n' && c != 'N' && c != ctrlChar('C')) {
+ 			do {
+@@ -516,8 +518,7 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 				(completions.size() + columnCount - 1) / columnCount;
+ 		for (size_t row = 0; row < rowCount; ++row) {
+ 			if (row == pauseRow) {
+-				printf("\n--More--");
+-				fflush(stdout);
++				REprintf("\n--More--");
+ 				c = 0;
+ 				bool doBeep = false;
+ 				while (c != ' ' && c != '\r' && c != '\n' && c != 'y' && c != 'Y' &&
+@@ -536,19 +537,19 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 					case ' ':
+ 					case 'y':
+ 					case 'Y':
+-						printf("\r				\r");
++						REprintf("\r				\r");
+ 						pauseRow += getScreenRows() - 1;
+ 						break;
+ 					case '\r':
+ 					case '\n':
+-						printf("\r				\r");
++						REprintf("\r				\r");
+ 						++pauseRow;
+ 						break;
+ 					case 'n':
+ 					case 'N':
+ 					case 'q':
+ 					case 'Q':
+-						printf("\r				\r");
++						REprintf("\r				\r");
+ 						stopList = true;
+ 						break;
+ 					case ctrlChar('C'):
+@@ -557,7 +558,7 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 						break;
+ 				}
+ 			} else {
+-				printf("\n");
++				REprintf("\n");
+ 			}
+ 			if (stopList) {
+ 				break;
+@@ -566,7 +567,6 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 				size_t index = (column * rowCount) + row;
+ 				if (index < completions.size()) {
+ 					itemLength = static_cast<int>(completions[index].length());
+-					fflush(stdout);
+ 
+ 					static Utf32String const col( ansi_color( Replxx::Color::BRIGHTMAGENTA ) );
+ 					if ( !_replxx.no_color() && ( write32( 1, col.get(), col.length() ) == -1 ) )
+@@ -582,13 +582,12 @@ int InputBuffer::completeLine(PromptBase& pi) {
+ 
+ 					if (((column + 1) * rowCount) + row < completions.size()) {
+ 						for (int k = itemLength; k < longestCompletion; ++k) {
+-							printf(" ");
++							REprintf(" ");
+ 						}
+ 					}
+ 				}
+ 			}
+ 		}
+-		fflush(stdout);
+ 	}
+ 
+ 	// display the prompt on a new line, then redisplay the input buffer
+diff --git a/src/replxx/io.cxx b/src/replxx/io.cxx
+index 2b2f7fe..100cc07 100644
+--- a/src/replxx/io.cxx
++++ b/src/replxx/io.cxx
+@@ -1,3 +1,6 @@
++
++#include <R.h>
++
+ #include <memory>
+ #include <cerrno>
+ #include <cstdlib>
+@@ -271,8 +274,7 @@ char32_t readUnicodeCharacter(void) {
+ #endif	// #ifndef _WIN32
+ 
+ void beep() {
+-	fprintf(stderr, "\x7");	// ctrl-G == bell/beep
+-	fflush(stderr);
++	REprintf("\x7");	// ctrl-G == bell/beep
+ }
+ 
+ // replxx_read_char -- read a keystroke or keychord from the keyboard, and
+@@ -403,7 +405,7 @@ char32_t read_char(void) {
+ // program
+ // gives us on different keystrokes.	Hit ctrl-C to exit this mode.
+ //
+-#define _DEBUG_LINUX_KEYBOARD
++// #define _DEBUG_LINUX_KEYBOARD
+ #if defined(_DEBUG_LINUX_KEYBOARD)
+ 	if (c == ctrlChar('^')) {	// ctrl-^, special debug mode, prints all keys hit,
+ 														 // ctrl-C to get out
+diff --git a/src/replxx/replxx.cxx b/src/replxx/replxx.cxx
+index f46d1c3..651c4e8 100644
+--- a/src/replxx/replxx.cxx
++++ b/src/replxx/replxx.cxx
+@@ -83,6 +83,8 @@
+  *
+  */
+ 
++#include <Rinternals.h>
++
+ #include <string>
+ #include <vector>
+ #include <algorithm>
+@@ -304,14 +306,12 @@ char const* Replxx::ReplxxImpl::input( std::string const& prompt ) {
+ #endif
+ 	if ( tty::in ) {	// input is from a terminal
+ 		if (!_errorMessage.empty()) {
+-			printf("%s", _errorMessage.c_str());
+-			fflush(stdout);
++			REprintf("%s", _errorMessage.c_str());
+ 			_errorMessage.clear();
+ 		}
+ 		PromptInfo pi(prompt, getScreenColumns());
+ 		if (isUnsupportedTerm()) {
+ 			if (!pi.write()) return 0;
+-			fflush(stdout);
+ 			if (_preloadedBuffer.empty()) {
+ 				if (fgets(_inputBuffer.get(), _maxLineLength, stdin) == NULL) {
+ 					return NULL;
+@@ -341,8 +341,8 @@ char const* Replxx::ReplxxImpl::input( std::string const& prompt ) {
+ 			if (count == -1) {
+ 				return NULL;
+ 			}
+-			assert( ib.length() < _maxLineLength );
+-			printf("\n");
++			if (ib.length() >= _maxLineLength ) error("Line too long");
++			REprintf("\n");
+ 			size_t bufferSize = sizeof(char32_t) * ib.length() + 1;
+ 			copyString32to8(_inputBuffer.get(), bufferSize, ib.buf());
+ 			return ( _inputBuffer.get() );
+@@ -765,7 +765,7 @@ int replxx_history_size( ::Replxx* replxx_ ) {
+ void replxx_debug_dump_print_codes(void) {
+ 	char quit[4];
+ 
+-	printf(
++	REprintf(
+ 			"replxx key codes debugging mode.\n"
+ 			"Press keys to see scan codes. Type 'quit' at any time to exit.\n");
+ 	if (enableRawMode() == -1) return;
+@@ -784,10 +784,9 @@ void replxx_debug_dump_print_codes(void) {
+ 		quit[sizeof(quit) - 1] = c; /* Insert current char on the right. */
+ 		if (memcmp(quit, "quit", sizeof(quit)) == 0) break;
+ 
+-		printf("'%c' %02x (%d) (type quit to exit)\n", isprint(c) ? c : '?', (int)c,
++		REprintf("'%c' %02x (%d) (type quit to exit)\n", isprint(c) ? c : '?', (int)c,
+ 					 (int)c);
+-		printf("\r"); /* Go left edge manually, we are in raw mode. */
+-		fflush(stdout);
++		REprintf("\r"); /* Go left edge manually, we are in raw mode. */
+ 	}
+ 	disableRawMode();
+ }

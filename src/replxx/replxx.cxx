@@ -83,6 +83,8 @@
  *
  */
 
+#include <Rinternals.h>
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -304,14 +306,12 @@ char const* Replxx::ReplxxImpl::input( std::string const& prompt ) {
 #endif
 	if ( tty::in ) {	// input is from a terminal
 		if (!_errorMessage.empty()) {
-			printf("%s", _errorMessage.c_str());
-			fflush(stdout);
+			REprintf("%s", _errorMessage.c_str());
 			_errorMessage.clear();
 		}
 		PromptInfo pi(prompt, getScreenColumns());
 		if (isUnsupportedTerm()) {
 			if (!pi.write()) return 0;
-			fflush(stdout);
 			if (_preloadedBuffer.empty()) {
 				if (fgets(_inputBuffer.get(), _maxLineLength, stdin) == NULL) {
 					return NULL;
@@ -341,8 +341,8 @@ char const* Replxx::ReplxxImpl::input( std::string const& prompt ) {
 			if (count == -1) {
 				return NULL;
 			}
-			assert( ib.length() < _maxLineLength );
-			printf("\n");
+			if (ib.length() >= _maxLineLength ) error("Line too long");
+			REprintf("\n");
 			size_t bufferSize = sizeof(char32_t) * ib.length() + 1;
 			copyString32to8(_inputBuffer.get(), bufferSize, ib.buf());
 			return ( _inputBuffer.get() );
@@ -765,7 +765,7 @@ int replxx_history_size( ::Replxx* replxx_ ) {
 void replxx_debug_dump_print_codes(void) {
 	char quit[4];
 
-	printf(
+	REprintf(
 			"replxx key codes debugging mode.\n"
 			"Press keys to see scan codes. Type 'quit' at any time to exit.\n");
 	if (enableRawMode() == -1) return;
@@ -784,10 +784,9 @@ void replxx_debug_dump_print_codes(void) {
 		quit[sizeof(quit) - 1] = c; /* Insert current char on the right. */
 		if (memcmp(quit, "quit", sizeof(quit)) == 0) break;
 
-		printf("'%c' %02x (%d) (type quit to exit)\n", isprint(c) ? c : '?', (int)c,
+		REprintf("'%c' %02x (%d) (type quit to exit)\n", isprint(c) ? c : '?', (int)c,
 					 (int)c);
-		printf("\r"); /* Go left edge manually, we are in raw mode. */
-		fflush(stdout);
+		REprintf("\r"); /* Go left edge manually, we are in raw mode. */
 	}
 	disableRawMode();
 }

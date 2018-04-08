@@ -1,3 +1,6 @@
+
+#include <R.h>
+
 #include <algorithm>
 #include <memory>
 #include <cerrno>
@@ -465,9 +468,8 @@ int InputBuffer::completeLine(PromptBase& pi) {
 		_pos = _len;
 		refreshLine(pi);
 		_pos = savePos;
-		printf("\nDisplay all %u possibilities? (y or n)",
+		REprintf("\nDisplay all %u possibilities? (y or n)",
 					 static_cast<unsigned int>(completions.size()));
-		fflush(stdout);
 		onNewLine = true;
 		while (c != 'y' && c != 'Y' && c != 'n' && c != 'N' && c != ctrlChar('C')) {
 			do {
@@ -516,8 +518,7 @@ int InputBuffer::completeLine(PromptBase& pi) {
 				(completions.size() + columnCount - 1) / columnCount;
 		for (size_t row = 0; row < rowCount; ++row) {
 			if (row == pauseRow) {
-				printf("\n--More--");
-				fflush(stdout);
+				REprintf("\n--More--");
 				c = 0;
 				bool doBeep = false;
 				while (c != ' ' && c != '\r' && c != '\n' && c != 'y' && c != 'Y' &&
@@ -536,19 +537,19 @@ int InputBuffer::completeLine(PromptBase& pi) {
 					case ' ':
 					case 'y':
 					case 'Y':
-						printf("\r				\r");
+						REprintf("\r				\r");
 						pauseRow += getScreenRows() - 1;
 						break;
 					case '\r':
 					case '\n':
-						printf("\r				\r");
+						REprintf("\r				\r");
 						++pauseRow;
 						break;
 					case 'n':
 					case 'N':
 					case 'q':
 					case 'Q':
-						printf("\r				\r");
+						REprintf("\r				\r");
 						stopList = true;
 						break;
 					case ctrlChar('C'):
@@ -557,7 +558,7 @@ int InputBuffer::completeLine(PromptBase& pi) {
 						break;
 				}
 			} else {
-				printf("\n");
+				REprintf("\n");
 			}
 			if (stopList) {
 				break;
@@ -566,7 +567,6 @@ int InputBuffer::completeLine(PromptBase& pi) {
 				size_t index = (column * rowCount) + row;
 				if (index < completions.size()) {
 					itemLength = static_cast<int>(completions[index].length());
-					fflush(stdout);
 
 					static Utf32String const col( ansi_color( Replxx::Color::BRIGHTMAGENTA ) );
 					if ( !_replxx.no_color() && ( write32( 1, col.get(), col.length() ) == -1 ) )
@@ -582,13 +582,12 @@ int InputBuffer::completeLine(PromptBase& pi) {
 
 					if (((column + 1) * rowCount) + row < completions.size()) {
 						for (int k = itemLength; k < longestCompletion; ++k) {
-							printf(" ");
+							REprintf(" ");
 						}
 					}
 				}
 			}
 		}
-		fflush(stdout);
 	}
 
 	// display the prompt on a new line, then redisplay the input buffer

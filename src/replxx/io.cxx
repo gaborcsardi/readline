@@ -1,3 +1,6 @@
+
+#include <R.h>
+
 #include <memory>
 #include <cerrno>
 #include <cstdlib>
@@ -271,8 +274,7 @@ char32_t readUnicodeCharacter(void) {
 #endif	// #ifndef _WIN32
 
 void beep() {
-	fprintf(stderr, "\x7");	// ctrl-G == bell/beep
-	fflush(stderr);
+	REprintf("\x7");	// ctrl-G == bell/beep
 }
 
 // replxx_read_char -- read a keystroke or keychord from the keyboard, and
@@ -403,7 +405,7 @@ char32_t read_char(void) {
 // program
 // gives us on different keystrokes.	Hit ctrl-C to exit this mode.
 //
-#define _DEBUG_LINUX_KEYBOARD
+// #define _DEBUG_LINUX_KEYBOARD
 #if defined(_DEBUG_LINUX_KEYBOARD)
 	if (c == ctrlChar('^')) {	// ctrl-^, special debug mode, prints all keys hit,
 														 // ctrl-C to get out
