@@ -2,7 +2,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
-#include "replxx.h"
+#include "replxx/replxx.h"
 
 SEXP read_line(SEXP prompt) {
 

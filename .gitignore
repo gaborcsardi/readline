@@ -2,4 +2,5 @@
 .Rhistory
 .RData
 src/*.o
+src/replxx/*.o
 src/lines.so
