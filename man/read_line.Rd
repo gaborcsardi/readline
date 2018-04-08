@@ -4,8 +4,7 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "", multiline = FALSE, history = NULL,
-  completions = NULL)
+read_line(prompt = "? ")
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
@@ -50,4 +49,3 @@ Read a line from the terminal
   read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 }
 }
-

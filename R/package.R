@@ -19,7 +19,7 @@
 #' @return A character scalar, the string that was read.
 #'
 #' @export
-#' @useDynLib readline R_readline_read_line
+#' @useDynLib lines, .registration = TRUE, .fixes = "C_"
 #' @examples
 #' \dontrun{
 #'   read_line(prompt = "what> ")
@@ -37,47 +37,11 @@
 #'   read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 #' }
 
-read_line <- function(prompt = "", multiline = FALSE, history = NULL,
-                      completions = NULL) {
-
-  prompt <- as_string(prompt)
-  multiline <- as_flag(multiline)
-  if (!is.null(history)) history <- as_string(history)
-
-  if (is_supported_terminal()) {
-    ## This loads the history if needed
-    ans <- .Call(
-      "R_readline_read_line", prompt, multiline, history,
-      completions
-    )
-
-  } else {
-
-    if (!is.null(history)) {
-      tmp <- tempfile()
-      tryCatch(savehistory(tmp), error = function(e) e)
-      on.exit(
-        tryCatch(loadhistory(tmp), error = function(e) e),
-        add = TRUE
-      )
-    }
-
-    ans <- readline(prompt)
-
-  }
-
-  ## Save history if requested
-  if (!is.null(history)) {
-    cat(ans, sep = "", "\n", file = history, append = TRUE)
-  }
-  ans
-}
-
-is_supported_terminal <- function() {
-  isatty(stdin()) &&
-    .Platform$OS.type == "unix" &&
-    Sys.getenv("RSTUDIO") != 1 &&
-    Sys.getenv("R_GUI_APP_VERSION") == "" &&
-    .Platform$GUI != "Rgui" &&
-    !identical(getOption("STERM"), "iESS") && Sys.getenv("EMACS") != "t"
+read_line <-  function(prompt = "? ") {
+  res <- tryCatch(
+    .Call(C_read_line, prompt),
+    interrupt = function(e) stop("Interrupted")
+  )
+  if (is.null(res)) stop("Interrupted")
+  res
 }

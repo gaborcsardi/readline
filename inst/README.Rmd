@@ -8,14 +8,14 @@ knitr::opts_chunk$set(
   fig.height = 8)
 ```
 
-# readline
+# lines
 
 > Nice and Easy Terminal Input
 
-[![Linux Build Status](https://travis-ci.org/gaborcsardi/readline.svg?branch=master)](https://travis-ci.org/gaborcsardi/readline)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/readline?svg=true)](https://ci.appveyor.com/project/gaborcsardi/readline)
-[![](http://www.r-pkg.org/badges/version/readline)](http://www.r-pkg.org/pkg/readline)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/readline)](http://www.r-pkg.org/pkg/readline)
+[![Linux Build Status](https://travis-ci.org/gaborcsardi/lines.svg?branch=master)](https://travis-ci.org/gaborcsardi/lines)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/lines?svg=true)](https://ci.appveyor.com/project/gaborcsardi/lines)
+[![](http://www.r-pkg.org/badges/version/lines)](http://www.r-pkg.org/pkg/lines)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/lines)](http://www.r-pkg.org/pkg/lines)
 
 
 Read a line or a paragraph from the terminal. It supports ANSI colors and
@@ -25,15 +25,15 @@ It uses the [linenoise](https://github.com/antirez/linenoise.git) library.
 ## Installation
 
 ```{r eval = FALSE}
-devtools::install_github("gaborcsardi/readline")
+devtools::install_github("gaborcsardi/lines")
 ```
 
 ## Usage
 
 ```{r}
-library(readline)
+library(lines)
 ```
 
 ## License
 
-BSD © Salvatore Sanfilippo, Pieter Noordhuis, Yuji Hirose, Gábor Csárdi
+BSD © Salvatore Sanfilippo, Pieter Noordhuis, Marcin Konarski, Gábor Csárdi

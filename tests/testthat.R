@@ -1,4 +1,4 @@
 library(testthat)
-library(readline)
+library(lines)
 
-test_check("readline")
+test_check("lines")
