@@ -1,6 +1,4 @@
 
-#include <R.h>
-
 #include <algorithm>
 #include <memory>
 #include <cerrno>
@@ -24,6 +22,8 @@
 #include <signal.h>
 
 #endif /* _WIN32 */
+
+#include <R.h>
 
 #include "inputbuffer.hxx"
 #include "prompt.hxx"
