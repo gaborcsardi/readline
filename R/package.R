@@ -37,9 +37,12 @@
 #'   read_line(prompt = "what> ", completions = c("foobar", "foo", "bar"))
 #' }
 
-read_line <-  function(prompt = "? ") {
+read_line <-  function(prompt = "? ", history = NULL) {
+
+  if (!is.null(history)) history <- as_string(history)
+
   res <- tryCatch(
-    .Call(C_read_line, prompt),
+    .Call(C_read_line, prompt, history),
     interrupt = function(e) stop("Interrupted")
   )
   if (is.null(res)) stop("Interrupted")

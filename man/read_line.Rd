@@ -4,7 +4,7 @@
 \alias{read_line}
 \title{Read a line from the terminal}
 \usage{
-read_line(prompt = "? ")
+read_line(prompt = "? ", history = NULL)
 }
 \arguments{
 \item{prompt}{A string that is printed at the beginning of the
@@ -12,15 +12,15 @@ line of the user input. Ideally it should be short, so there
 is enough space for the input. It can be colored and styled
 with ANSI escape sequences from the \code{crayon} package.}
 
-\item{multiline}{Whether to use multi-line mode. This is ignored
-on unsupported terminals, those work similarly to multi-line
-mode, anyway.}
-
 \item{history}{If not \code{NULL}, then it must be a character
 scalar, the name of the file that is used as a browseable history. The
 newly entered entry is added to this file. Note that history
 might not be supported by the \code{base::readline} fallback
 method.}
+
+\item{multiline}{Whether to use multi-line mode. This is ignored
+on unsupported terminals, those work similarly to multi-line
+mode, anyway.}
 
 \item{completions}{A character vector of possible TAB-completions.
 Ignored on unsupported terminals that use the \code{base::readline}
