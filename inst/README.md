@@ -13,7 +13,7 @@
 
 Read a line or a paragraph from the terminal. It supports ANSI colors and
 UniCode characters. It also supports input history and TAB completion.
-It uses the [linenoise](https://github.com/antirez/linenoise.git) library.
+It uses the [replxx](https://github.com/AmokHuginnsson/replxx) library.
 
 ## Installation
 

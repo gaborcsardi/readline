@@ -1,17 +1,18 @@
 Package: lines
 Title: Nice and Easy Terminal Input
-Version: 1.0.0
-Author: Salvatore Sanfilippo, Pieter Noordhuis, Yuji Hirose, Gabor Csardi
-Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
+Version: 2.0.0
+Author: Salvatore Sanfilippo, Pieter Noordhuis, Marcin Konarski, Gábor Csárdi
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
 Description: Read a line or a paragraph from the terminal.
-    It supports ANSI colors and UniCode characters. It also supports
-    input history and TAB completion. It is based on the 'linenoise'
-    library by Salvatore Sanfilippo.
+    It supports ANSI colors and UTF-8 characters. It also supports
+    input history and TAB completion and hinting. It is based on the
+    'replxx' library by Marcin Konarski.
 License: BSD_2_clause + file LICENSE
 LazyData: true
-URL: https://github.com/gaborcsardi/lines
+URL: https://github.com/gaborcsardi/lines#readme
 BugReports: https://github.com/gaborcsardi/lines/issues
 Suggests:
     testthat
 RoxygenNote: 6.0.1
 SystemRequirements: C++11
+Encoding: UTF-8
