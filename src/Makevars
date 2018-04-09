@@ -5,8 +5,14 @@ OBJECTS=replxx/conversion.o replxx/inputbuffer.o replxx/replxx.o \
   replxx/ConvertUTF.o replxx/wcwidth.o \
   api.o
 
+PKG_LIBS=-lstdc++
+
 all: $(SHLIB)
 
 %.o: %.cxx
+	$(CXX11) $(CXX11STD) $(CXX11FLAGS) $(CXX11PICFLAGS) \
+	$(ALL_CPPFLAGS) $(CXXFLAGS) -c $< -Ireplxx -o $@
+
+%.o: %.cpp
 	$(CXX11) $(CXX11STD) $(CXX11FLAGS) $(CXX11PICFLAGS) \
 	$(ALL_CPPFLAGS) $(CXXFLAGS) -c $< -Ireplxx -o $@

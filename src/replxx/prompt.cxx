@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <io.h>
 #if _MSC_VER < 1900
-#define snprintf _snprintf	// Microsoft headers use underscores in some names
+//#define snprintf _snprintf	// Microsoft headers use underscores in some names
 #endif
 #define strcasecmp _stricmp
 #define strdup _strdup

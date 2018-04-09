@@ -84,6 +84,9 @@
  */
 
 #include <Rinternals.h>
+#undef ERROR
+#undef Realloc
+#undef Free
 
 #include <string>
 #include <vector>

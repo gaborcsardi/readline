@@ -1,5 +1,8 @@
 
 #include <R.h>
+#undef ERROR
+#undef Realloc
+#undef Free
 
 #include <memory>
 #include <cerrno>
@@ -228,7 +231,6 @@ void disableRawMode(void) {
 #endif
 }
 
-#ifndef _WIN32
 
 /**
  * Read a UTF-8 sequence from the non-Windows keyboard and return the Unicode
@@ -270,8 +272,6 @@ char32_t readUnicodeCharacter(void) {
 		}
 	}
 }
-
-#endif	// #ifndef _WIN32
 
 void beep() {
 	REprintf("\x7");	// ctrl-G == bell/beep

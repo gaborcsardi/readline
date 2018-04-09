@@ -1,4 +1,9 @@
 
+#include <R.h>
+#undef ERROR
+#undef Realloc
+#undef Free
+
 #include <algorithm>
 #include <memory>
 #include <cerrno>
@@ -22,8 +27,6 @@
 #include <signal.h>
 
 #endif /* _WIN32 */
-
-#include <R.h>
 
 #include "inputbuffer.hxx"
 #include "prompt.hxx"
