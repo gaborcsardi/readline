@@ -17,9 +17,11 @@ It uses the [linenoise](https://github.com/antirez/linenoise.git) library.
 
 ## Installation
 
+Once on CRAN install the package the usual way:
+
 
 ```r
-devtools::install_github("gaborcsardi/readline")
+install.packages("readline")
 ```
 
 ## Usage
